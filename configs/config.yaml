@@ -1,5 +1,5 @@
 data:
-    batch_size : 32
+    batch_size : 8
     max_len : 256
     csv_file : 'data/processed.csv'
     tokenizer_name : 'microsoft/DialoGPT-small'
@@ -7,11 +7,11 @@ data:
 
 model:
     n_positions : 256
-    n_ctx : 256512
-    n_embd : 768
-    n_layer : 6
-    n_head: 12
-    n_inner : 1024
+    n_ctx : 256
+    n_embd : 512
+    n_layer : 4
+    n_head: 8
+    n_inner : 768
 
 opt:
     lr : 0.00005

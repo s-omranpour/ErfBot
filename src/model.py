@@ -16,8 +16,8 @@ class ErfBot(pl.LightningModule):
         return res.logits, res.loss
 
     def step(self, batch, mode='train'):
-        outputs, losses = self.forward(batch)
-        loss = sum([losses[k] for k in losses])
+        outputs, loss = self.forward(batch)
+#         loss = sum([losses[k] for k in losses])
         self.log(mode+'_loss', loss, on_step=True, on_epoch=False, prog_bar=True, logger=True)
         return loss
 
