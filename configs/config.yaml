@@ -1,8 +1,9 @@
 data:
-    batch_size : 8
+    batch_size : 20
     max_len : 256
-    csv_file : 'data/processed.csv'
-    tokenizer_name : 'microsoft/DialoGPT-small'
+    csv_file : 'data/processed_cleaned.csv'
+    tokenizer_name : 'bolbolzaban/gpt2-persian'
+#     tokenizer_name : 'microsoft/DialoGPT-small'
     val_frac: 0.1
 
 model:
@@ -15,5 +16,5 @@ model:
 
 opt:
     lr : 0.00005
-    max_epochs: 100
+    max_epochs: 10
     weight_decay : 0.001

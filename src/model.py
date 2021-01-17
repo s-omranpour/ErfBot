@@ -1,15 +1,18 @@
 import torch
 import pytorch_lightning as pl
-from transformers import GPT2LMHeadModel, AdamW
+from transformers import GPT2LMHeadModel
 
 class ErfBot(pl.LightningModule):
-    def __init__(self, config, lr, weight_decay, max_epochs):
+    def __init__(self, config, lr, weight_decay, max_epochs, use_pretrained=False):
         super().__init__()
         self.lr = lr
         self.weight_decay = weight_decay
         self.max_epochs = max_epochs
         self.save_hyperparameters()
-        self.model = GPT2LMHeadModel(config)
+        if use_pretrained:
+            self.model = GPT2LMHeadModel.from_pretrained('bolbolzaban/gpt2-persian')
+        else:
+            self.model = GPT2LMHeadModel(config)
         
     def forward(self, inputs):
         res = self.model(**inputs, labels=inputs["input_ids"])
@@ -17,8 +20,7 @@ class ErfBot(pl.LightningModule):
 
     def step(self, batch, mode='train'):
         outputs, loss = self.forward(batch)
-#         loss = sum([losses[k] for k in losses])
-        self.log(mode+'_loss', loss, on_step=True, on_epoch=False, prog_bar=True, logger=True)
+        self.log(mode+'_loss', loss, logger=True)
         return loss
 
     def training_step(self, batch, batch_idx):
@@ -40,7 +42,7 @@ class ErfBot(pl.LightningModule):
             },
             {"params": [p for n, p in self.named_parameters() if any(nd in n for nd in no_decay)], "weight_decay": 0.0},
         ]
-        opt = AdamW(grouped_parameters, lr=self.lr)
+        opt = torch.optim.Adam(grouped_parameters, lr=self.lr)
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=self.max_epochs, eta_min=1e-8)
         return [opt], [sch]
 
