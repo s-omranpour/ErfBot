@@ -3,14 +3,14 @@ import pytorch_lightning as pl
 from transformers import GPT2LMHeadModel
 
 class ErfBot(pl.LightningModule):
-    def __init__(self, config, lr, weight_decay, max_epochs, use_pretrained=False):
+    def __init__(self, lr, weight_decay, max_epochs, config=None, pretrained=None):
         super().__init__()
         self.lr = lr
         self.weight_decay = weight_decay
         self.max_epochs = max_epochs
         self.save_hyperparameters()
-        if use_pretrained:
-            self.model = GPT2LMHeadModel.from_pretrained('bolbolzaban/gpt2-persian')
+        if pretrained:
+            self.model = GPT2LMHeadModel.from_pretrained(pretrained)
         else:
             self.model = GPT2LMHeadModel(config)
         
