@@ -1,10 +1,11 @@
 #     model_name : 'bolbolzaban/gpt2-persian'
 model_name : 'microsoft/DialoGPT-small'
+pretrained : False
 
 data:
-    batch_size : 5
+    batch_size : 15
     max_len : 256
-    csv_file : 'data/processed.csv'
+    csv_file : 'data/context.csv'
     val_frac: 0.1
 
 model:
@@ -16,6 +17,6 @@ model:
     n_inner : 768
 
 opt:
-    lr : 0.00005
-    max_epochs: 10
-    weight_decay : 0.001
+    lr : 0.00008
+    max_epochs: 15
+    weight_decay : 0.

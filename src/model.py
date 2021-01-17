@@ -10,8 +10,10 @@ class ErfBot(pl.LightningModule):
         self.max_epochs = max_epochs
         self.save_hyperparameters()
         if pretrained:
+            print('using pretrained model:', pretrained)
             self.model = GPT2LMHeadModel.from_pretrained(pretrained)
         else:
+            print('building model from scratch!')
             self.model = GPT2LMHeadModel(config)
         
     def forward(self, inputs):
@@ -34,15 +36,15 @@ class ErfBot(pl.LightningModule):
         return outputs
 
     def configure_optimizers(self):
-        no_decay = ["bias", "LayerNorm.weight"]
-        grouped_parameters = [
-            {
-                "params": [p for n, p in self.named_parameters() if not any(nd in n for nd in no_decay)],
-                "weight_decay": self.weight_decay,
-            },
-            {"params": [p for n, p in self.named_parameters() if any(nd in n for nd in no_decay)], "weight_decay": 0.0},
-        ]
-        opt = torch.optim.Adam(grouped_parameters, lr=self.lr)
+#         no_decay = ["bias", "LayerNorm.weight"]
+#         grouped_parameters = [
+#             {
+#                 "params": [p for n, p in self.named_parameters() if not any(nd in n for nd in no_decay)],
+#                 "weight_decay": self.weight_decay,
+#             },
+#             {"params": [p for n, p in self.named_parameters() if any(nd in n for nd in no_decay)], "weight_decay": 0.0},
+#         ]
+        opt = torch.optim.Adam(self.parameters(), lr=self.lr)
         sch = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=self.max_epochs, eta_min=1e-8)
         return [opt], [sch]
 
